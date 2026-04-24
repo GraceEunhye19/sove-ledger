@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.sovereignledger.data.model.Allocation
 import com.example.sovereignledger.data.model.Transaction
 import com.example.sovereignledger.ui.components.AllocationCard
+import com.example.sovereignledger.ui.components.SpendingTrendChart
 import com.example.sovereignledger.ui.components.TransactionCard
 import com.example.sovereignledger.ui.theme.BackgroundGray
 import com.example.sovereignledger.ui.theme.BlueGradientEnd
@@ -64,22 +65,19 @@ fun OverviewScreen(
             WalletBalanceCard()
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 3. ALLOCATIONS SECTION
+
             SectionHeader(title = "Allocations", onViewAll = onViewAllAllocations)
-            //EmptyAllocationState(label = "No allocations set yet")
+
             AllocationRowSection(allocations = allocations)
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 4. SPENDING TREND SECTION
-            SectionHeader(title = "Spending Trend")
-            EmptyChartState()
+
+            SpendingTrendChart(transactions= transactions)
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // 5. RECENT LEDGER SECTION
             SectionHeader(title = "Recent Ledger", onViewAll = onViewAllLedger)
-            //EmptyLedgerState()
             RecentLedgerSection(
                 transactions = transactions.takeLast(5).reversed(),
                 onViewAll = onViewAllLedger
@@ -169,9 +167,6 @@ fun WalletBalanceCard(
                         fontStyle = FontStyle.Italic
                     )
                 }
-//                Text("LIQUID WEALTH PORTFOLIO", color = Color.White.copy(alpha = 0.7f), fontSize = 10.sp, fontWeight = FontWeight.Bold)
-//                Text("$0.00", color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
-//                Text("Market valuation as of today", color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -182,7 +177,6 @@ fun WalletBalanceCard(
                     Button(
                         onClick = onDepositClick,
                         modifier = Modifier
-                            //.padding(12.dp)
                             .weight(1f),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.1f)),
                         shape = RoundedCornerShape(12.dp)
@@ -193,7 +187,6 @@ fun WalletBalanceCard(
                         onClick = onWithdrawClick,
                         modifier = Modifier
                             .weight(1f),
-                            //.padding(12.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.1f)),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -207,7 +200,7 @@ fun WalletBalanceCard(
 
 
 @Composable
-//to be fixed so view all will be a text button
+
 fun SectionHeader(title: String, onViewAll: (()-> Unit)? = null){
     Row(
         modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
@@ -215,14 +208,13 @@ fun SectionHeader(title: String, onViewAll: (()-> Unit)? = null){
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = title, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-        //Text(text = "View All", fontSize = 12.sp, color = SovereignBlue, fontWeight = FontWeight.Medium)
 
         if (onViewAll != null) {
             TextButton(onClick = onViewAll) {
                 Text("View All", fontSize = 12.sp, color = SovereignBlue, fontWeight = FontWeight.Medium)
             }
         } else {
-            Text("View All", fontSize = 12.sp, color = SovereignBlue, fontWeight = FontWeight.Medium)
+            Text("", fontSize = 12.sp, color = SovereignBlue, fontWeight = FontWeight.Medium)
         }
     }
 }
@@ -266,19 +258,19 @@ fun AllocationRowSection(allocations: List<Allocation>) {
     }
 }
 
-@Composable
-fun EmptyChartState(){
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
-            //.background(Color.White, RoundedCornerShape(16.dp)),
-            //.border(1.dp, CardOutline, RoundedCornerShape(16.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "No trend data available", color = Color.Gray, fontSize = 14.sp)
-    }
-}
+//@Composable
+//fun EmptyChartState(){
+//    Box(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(200.dp),
+//            //.background(Color.White, RoundedCornerShape(16.dp)),
+//            //.border(1.dp, CardOutline, RoundedCornerShape(16.dp)),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        Text(text = "No trend data available", color = Color.Gray, fontSize = 14.sp)
+//    }
+//}
 
 //@Composable
 //fun EmptyLedgerState(){
@@ -311,7 +303,7 @@ fun RecentLedgerSection(transactions: List<Transaction>, onViewAll: () -> Unit) 
                 modifier = Modifier.fillMaxWidth().height(70.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
-                Text("No recent transactions\n Tap View all to add", color = Color.LightGray,
+                Text("No recent transactions\n Tap View all or + to add", color = Color.LightGray,
                     fontSize = 13.sp, modifier = Modifier.padding(start = 16.dp))
             }
         }
